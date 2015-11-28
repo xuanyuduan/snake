@@ -27,7 +27,19 @@ class Grid(object):
 	    for y_axis in range (0, self.grid_y-1):
 		list.append((x_axis,y_axis))
 	self.list = list
-    
+
+class Apple (object):
+    def __init__ (self,Grid):
+	self.grid = Grid
+	self.setup()
+    def position(self):
+    	x = randint (0,self.grid.x_axis-1)
+	y = randint (0,self.grid.y_axis-1)
+	self.pos = (x,y)
+    def showup(self):
+	self.grid.setup(self.pos,bg = 'green')
+
+
 if __name__ == "__main__":
     root = Tk()
     Grid(root)
