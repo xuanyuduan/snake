@@ -4,6 +4,30 @@ from Tkinter import *
 import sys
 from random import randint
 
+
+#initial message
+class Init(object):
+    def __init__ (self,master =None):
+        self.frame =Frame(master,width=300,height=780,bg='black')
+	self.frame.propagate (False)
+        self.frame.pack(side=LEFT,padx =2)
+        label = Label(self.frame,text = 'Snake Game',font=("Purisa",40),fg = 'Red',bg='black')
+        
+	label.pack(side=TOP)#,expand ='Yes',fill=Y)
+        empty = Label (self.frame,bg ='black')
+	empty.pack(side=TOP)
+	label2 = Label(self.frame, text = 'Xuyu Duan   ',fg = 'white',bg = 'black')
+        label2.pack(side=TOP, anchor = E)#,expand ='Yes',fill= Y)
+        label3 = Label (self.frame , text = 'Dong Wang   ',fg = 'white',bg = 'black')
+        label3.pack(side = TOP,anchor = E)#,expand ='Yes',fill = Y)
+        label4 = Label (self.frame , text = 'Sheng Wei   ',fg = 'white',bg = 'black')
+        label4.pack(side = TOP ,anchor = E)#,expand='Yes',fill=Y)
+	label5 = Label (self.frame,text ="<Press s to start>",fg = 'red',bg ='black',)
+	label5.pack(side=TOP)
+	var =StringVar()
+	message = Message (self.frame,textvariable=var,bg= 'black',fg='white',width=300)
+	var.set("How to play:\n	    Pause : p\n	    Direction: direction key")
+	message.pack(side=TOP)
 #setup grid frame
 #setup grid frame
 class Grid(object):
@@ -42,49 +66,14 @@ class Apple (object):
     def showup(self):		    #display apple
 	self.grid.draw(self.pos,bg = 'green')
 
-class speed(object):
-    def __init__ (self,master =None):
-	self.frame =Frame(master,width=300,height=200)
-	self.frame.pack()
-	label = Label(self.frame,text = 'Snake Game',font=("Purisa",40),fg = 'Red')
-	label.pack(side=TOP)
-	label2 = Label(self.frame, text = 'Xuyu Duan')
-	label2.pack(expand = 'Yes',side=TOP)
-	label3 = Label (self.frame , text = 'Dong Wang')
-	label3.pack(side = TOP)
-	label4 = Label (self.frame , text = 'Sheng Wei')
-	label4.pack(side = TOP)
-	button1 = Button(self.frame,text='slow',command=self.Return)
-	button1.pack(side=BOTTOM)
-	button2 = Button(self.frame,text='Midium',command = self.Return2)
-	button2.pack(side=BOTTOM)
-	button3 = Button(self.frame,text = 'Fast',command = self.Return3)
-	button3.pack(side = BOTTOM)
-	self.spe =100
-    def Return(self):
-	self.spe = 300
-	self.frame.destroy()
-
-    def Return2(self):
-	self.spe = 400
-	print(self.spe)
-	self.frame.destroy()
-    def Return3(self):
-	self.spe = 700
-	self.frame.destroy()	
-	
-
 class Snake(object):
     def __init__ (self,Grid):
 	self.grid = Grid
 	self.apple = Apple(self.grid)
-	self.snake_length = 3
-	self.snake = [(12,6),(12,7),(12,8)] 
+	self.snake = [(12,6),(12,7)] 
     def display (self):
-	for (x,y) in self.snake
+	for (x,y) in self.snake:
 	    self.grid.draw((x,y),'blue')
-	pos = self.snake[0]
-	self.grid.draw(pos,'dark')
     def isAvaliable(self):
 	for i in self.grid.list:
 	    if i not in self.snake [1: ]:
@@ -97,7 +86,7 @@ class Snake(object):
 	self.apple.showup()
     def dir_change (self,direction):
 	self.direction = direction
-    def move(self):
+#    def move(self):
 	
 
 if __name__ == "__main__":
@@ -106,7 +95,8 @@ if __name__ == "__main__":
     #c = Snake(root)
     #c.display()
     Grid(root)
-    Apple(root)
+    Init(root)
+    #Apple(root)
     #a=b.spe
     #print(a)
     #GApple(root)
