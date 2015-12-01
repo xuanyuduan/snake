@@ -29,7 +29,6 @@ class Init(object):
 	var.set("How to play:\n	    Pause : p\n	    Direction: direction key")
 	message.pack(side=TOP)
 #setup grid frame
-#setup grid frame
 class Grid(object):
     def __init__ (self,master=None,width=1000,height=800,grid_width=20,offset=10): 
 		self.height = height
@@ -58,8 +57,8 @@ class Apple (object):
 	self.grid = Grid
 	self.position()
     def position(self):		    #apple position
-    	x = randint (0,self.grid.grid_x-1)
-	y = randint (0,self.grid.grid_y-1)
+    	x = randint (1,self.grid.grid_x-2)
+	y = randint (1,self.grid.grid_y-2)
 	print(self.grid.offset)
 	self.pos = (x,y)
 	print(self.pos)
@@ -71,6 +70,10 @@ class Snake(object):
 	self.grid = Grid
 	self.apple = Apple(self.grid)
 	self.snake = [(12,6),(12,7)] 
+	self.status = [0,1]   # 0 -> stop 1->run
+	self.score = 0
+	self.isOver = False
+	self.direction = 'Right'
     def display (self):
 	for (x,y) in self.snake:
 	    self.grid.draw((x,y),'blue')
@@ -79,15 +82,52 @@ class Snake(object):
 	    if i not in self.snake [1: ]:
 		return True
     def display_apple(self):
-	while (1):
-	    num = self.apple.position()
-	    if num not in self.snake:    
-		break
-	self.apple.showup()
+		while (1):
+	    	num = self.apple.position()
+	    	if num not in self.snake:    
+				break
+		self.apple.showup()
     def dir_change (self,direction):
-	self.direction = direction
-#    def move(self):
+	if direction == 'Up' and not self.privious  == 'Down':
+            self.privious = direction 
+            self.direction = direction
+        if direction == 'Down'and not self.privious  == 'Up':
+            self.privious = direction 
+            self.direction = direction
+        if direction == 'Left' and not self.privious  == 'Right':
+            self.privious = direction 
+            self.direction = direction
+        if direction == 'Right' and not self.privious  == 'Left':
+            self.privious = direction
+            self.direction = direction
+    def move(self):
+		
 	
+class Game(Frame):
+    def __init__ (master =None,*args,**kwargs):
+	Frame.__init__(self,master)
+	self.master = master
+	self.grid = Grid(master,*args,**kwargs)
+	self.snake = Snake(self.grid)
+	self.isStart = False
+	self.bind_all("<KeyRelease>", self.key_release)
+    def run(self):	
+	if self.isStart is True:
+	    if self.status is 1:
+			self.snake.move()
+	    if self.snake.isOver is True:
+			sys.exit()
+    def key_release(self, event):
+        key = event.keysym
+	direc = {'Up','Down','Left','Right'}
+        if key in direc:   
+	    print(key)
+            self.snake.change_direction(key)
+            self.snake.move()
+        elif key == 'p':
+            self.snake.status.reverse()
+	elif key = 'Return':
+	    self.isStart = True 
 
 if __name__ == "__main__":
     root = Tk()
