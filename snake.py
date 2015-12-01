@@ -47,8 +47,8 @@ class Grid(object):
 		self.canvas.create_rectangle (x_axis,y_axis, x_axis + self.offset, y_axis + self.offset,fill = color,outline='grey')
     def list(self):         #create every small element
 		list=[]
-		for x_axis in range (0, self.grid_x-1):
-		    for y_axis in range (0, self.grid_y-1):
+		for x_axis in range (-1, self.grid_x-2):
+		    for y_axis in range (-1, self.grid_y-2):
 				list.append((x_axis,y_axis))
 		self.list = list
 
@@ -126,7 +126,7 @@ class Snake(object):
 	    del self.snake[-1]
 	self.display()
 	print(self.snake)
-	if buf in self.snake[1: ]:
+	if buf in self.snake[1: ] or buf not in self.grid.list:
 	    self.isOver = True			#set game over, and stop snake 
 	    self.status.reverse()		
 class Game(Frame):
@@ -152,7 +152,8 @@ class Game(Frame):
 			self.snake.move()
 
 	    if self.snake.isOver == True:
-			sys.exit()
+		#sys.exit()
+		print("")
 	self.after(self.snake.speed,self.run)
     def key_release(self, event):
         key = event.keysym
