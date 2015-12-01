@@ -22,7 +22,7 @@ class Init(object):
         label3.pack(side = TOP,anchor = E)#,expand ='Yes',fill = Y)
         label4 = Label (self.frame , text = 'Sheng Wei   ',fg = 'white',bg = 'black')
         label4.pack(side = TOP ,anchor = E)#,expand='Yes',fill=Y)
-	label5 = Label (self.frame,text ="<Press s to start>",fg = 'red',bg ='black',)
+	label5 = Label (self.frame,text ="<Press ENTER to start>",fg = 'red',bg ='black',)
 	label5.pack(side=TOP)
 	var =StringVar()
 	message = Message (self.frame,textvariable=var,bg= 'black',fg='white',width=300)
@@ -30,7 +30,7 @@ class Init(object):
 	message.pack(side=TOP)
 #setup grid frame
 class Grid(object):
-    def __init__ (self,master=None,width=1000,height=800,grid_width=20,offset=10): 
+    def __init__ (self,master=None,width=1000,height=800,grid_width=20,offset=20): 
 		self.height = height
 		self.width = width
 		self.grid_width = grid_width
@@ -59,11 +59,9 @@ class Apple (object):
     def position(self):		    #apple position
     	x = randint (1,self.grid.grid_x-2)
 	y = randint (1,self.grid.grid_y-2)
-	print(self.grid.offset)
 	self.pos = (x,y)
-	print(self.pos)
     def showup(self):		    #display apple
-	self.grid.draw(self.pos,bg = 'green')
+	self.grid.draw(self.pos,'magenta')
 
 class Snake(object):
     def __init__ (self,Grid):
@@ -74,6 +72,9 @@ class Snake(object):
 	self.score = 0
 	self.isOver = False
 	self.direction = 'Right'
+	self.privious = ""
+	self.display()
+	self.display_apple()
     def display (self):
 	for (x,y) in self.snake:
 	    self.grid.draw((x,y),'blue')
@@ -83,8 +84,8 @@ class Snake(object):
 		return True
     def display_apple(self):
 		while (1):
-	    	num = self.apple.position()
-	    	if num not in self.snake:    
+		   num = self.apple.position()
+		   if num not in self.snake:    
 				break
 		self.apple.showup()
     def dir_change (self,direction):
@@ -101,16 +102,40 @@ class Snake(object):
             self.privious = direction
             self.direction = direction
     def move(self):
-		
+	head = self.snake[0]
+	if (self.direction == 'Up'):
+	    buf = (head[0],head[1]+1)
+	elif (self.direction == 'Down'):
+	    buf = (head[0], head[1]-1)
+	elif (self.direction =='Right'):
+	    buf = (head[0] + 1 , head[0])
+	elif (self.direction == 'Left'):
+	    buf = (head[0]-1, head[0])	
+	del self.snake[0]
+	self.snake.insert(0,buf)
+	if (buf == self.apple.position):
+	    self.display_apple()
+	    self.score +=1
+	else:
+	    del self.snake[-1]
+	self.display()
+	print(self.snake)
 	
 class Game(Frame):
-    def __init__ (master =None,*args,**kwargs):
+    def __init__ (self,master =None,*args,**kwargs):
 	Frame.__init__(self,master)
 	self.master = master
 	self.grid = Grid(master,*args,**kwargs)
+	self.init = Init(master)
 	self.snake = Snake(self.grid)
 	self.isStart = False
 	self.bind_all("<KeyRelease>", self.key_release)
+	self.frame = Label(self.init.frame, text = "	Score",fg='white',bg='black')
+	self.frame.pack(side=TOP,anchor =W)
+	var=StringVar()
+	self.label = Message (self.init.frame, textvariable =var, fg ='white', bg = 'black')
+	var.set(self.snake.score)
+	self.label.pack(side =TOP)
     def run(self):	
 	if self.isStart is True:
 	    if self.status is 1:
@@ -122,11 +147,11 @@ class Game(Frame):
 	direc = {'Up','Down','Left','Right'}
         if key in direc:   
 	    print(key)
-            self.snake.change_direction(key)
+            self.snake.dir_change(key)
             self.snake.move()
         elif key == 'p':
             self.snake.status.reverse()
-	elif key = 'Return':
+	elif key == 'Return':
 	    self.isStart = True 
 
 if __name__ == "__main__":
@@ -134,10 +159,11 @@ if __name__ == "__main__":
     #b=speed(root)
     #c = Snake(root)
     #c.display()
-    Grid(root)
-    Init(root)
+    game = Game (root)
     #Apple(root)
     #a=b.spe
     #print(a)
     #GApple(root)
-    root.mainloop()
+    game.run()
+    game.mainloop()
+    #root.mainloop()
