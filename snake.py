@@ -68,8 +68,11 @@ class Snake(object):
 	self.grid = Grid
 	self.apple = Apple(self.grid)
 	self.snake = [(12,6),(12,7)] 
-	self.status = [0,1]   # 0 -> stop 1->run
+	self.status = ["run","stop"]   # 0 -> stop 1->run
 	self.score = 0
+	self.speed =300
+	print("check again")
+	print(self.apple.pos)
 	self.isOver = False
 	self.direction = 'Right'
 	self.privious = ""
@@ -83,11 +86,11 @@ class Snake(object):
 	    if i not in self.snake [1: ]:
 		return True
     def display_apple(self):
-		while (1):
-		   num = self.apple.position()
-		   if num not in self.snake:    
-				break
-		self.apple.showup()
+    	while (1):
+	    num = self.apple.position()
+	    if num not in self.snake:    
+		break
+	self.apple.showup()
     def dir_change (self,direction):
 	if direction == 'Up' and not self.privious  == 'Down':
             self.privious = direction 
@@ -102,25 +105,30 @@ class Snake(object):
             self.privious = direction
             self.direction = direction
     def move(self):
+	print (self.direction)
+	print (self.apple.pos)
 	head = self.snake[0]
 	if (self.direction == 'Up'):
-	    buf = (head[0],head[1]+1)
+	    buf = (head[0],head[1]-1)
 	elif (self.direction == 'Down'):
-	    buf = (head[0], head[1]-1)
+	    buf = (head[0], head[1]+1)
 	elif (self.direction =='Right'):
-	    buf = (head[0] + 1 , head[0])
-	elif (self.direction == 'Left'):
-	    buf = (head[0]-1, head[0])	
-	del self.snake[0]
+	    buf = (head[0]+1 , head[1])
+	else:
+	    buf = (head[0]-1, head[1])	
+	#del self.snake[0]
 	self.snake.insert(0,buf)
-	if (buf == self.apple.position):
+	if buf == self.apple.pos:
 	    self.display_apple()
 	    self.score +=1
 	else:
+	    self.grid.draw(self.snake[-1],'grey')
 	    del self.snake[-1]
 	self.display()
 	print(self.snake)
-	
+	if buf in self.snake[1: ]:
+	    self.isOver = True			#set game over, and stop snake 
+	    self.status.reverse()		
 class Game(Frame):
     def __init__ (self,master =None,*args,**kwargs):
 	Frame.__init__(self,master)
@@ -137,11 +145,15 @@ class Game(Frame):
 	var.set(self.snake.score)
 	self.label.pack(side =TOP)
     def run(self):	
-	if self.isStart is True:
-	    if self.status is 1:
+	print("inside")
+	if self.isStart == True:
+	    print("aaaaaaaaaaaaaa")
+	    if self.snake.status[0] is "run":
 			self.snake.move()
-	    if self.snake.isOver is True:
+
+	    if self.snake.isOver == True:
 			sys.exit()
+	self.after(self.snake.speed,self.run)
     def key_release(self, event):
         key = event.keysym
 	direc = {'Up','Down','Left','Right'}
@@ -149,11 +161,13 @@ class Game(Frame):
 	    print(key)
             self.snake.dir_change(key)
             self.snake.move()
+	    print (self.isStart)
+	    print(self.snake.isOver)
         elif key == 'p':
             self.snake.status.reverse()
 	elif key == 'Return':
 	    self.isStart = True 
-
+	    
 if __name__ == "__main__":
     root = Tk()
     #b=speed(root)
