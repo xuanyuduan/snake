@@ -64,9 +64,10 @@ class Apple (object):
 	self.grid.draw(self.pos,'magenta')
 
 class Snake(object):
-    def __init__ (self,Grid):
+    def __init__ (self,Grid,Init):
 	self.grid = Grid
 	self.apple = Apple(self.grid)
+	self.init = Init
 	self.snake = [(12,6),(12,7)] 
 	self.status = ["run","stop"]   # 0 -> stop 1->run
 	self.score = 0
@@ -78,7 +79,12 @@ class Snake(object):
 	self.privious = ""
 	self.display()
 	self.display_apple()
-    def display (self):
+	var=StringVar()
+	self.label = Message (self.init.frame, textvariable =var, fg ='white', bg = 'black')
+	var.set(self.score)
+	self.label.pack(side =TOP)
+
+    def display(self):
 	for (x,y) in self.snake:
 	    self.grid.draw((x,y),'blue')
     def isAvaliable(self):
@@ -135,40 +141,53 @@ class Game(Frame):
 	self.master = master
 	self.grid = Grid(master,*args,**kwargs)
 	self.init = Init(master)
-	self.snake = Snake(self.grid)
+	self.snake = Snake(self.grid,self.init)
 	self.isStart = False
 	self.bind_all("<KeyRelease>", self.key_release)
-	self.frame = Label(self.init.frame, text = "	Score",fg='white',bg='black')
-	self.frame.pack(side=TOP,anchor =W)
-	var=StringVar()
-	self.label = Message (self.init.frame, textvariable =var, fg ='white', bg = 'black')
-	var.set(self.snake.score)
-	self.label.pack(side =TOP)
+
+	self.frame = Label(self.init.frame, text = "  Speed Control:",font=("Purise",20),fg='white',bg='black')
+	self.frame.pack(side=TOP,anchor =W,fill= Y)
+
+	self.up = Button (self.init.frame,text =" Speed  Up ",bg ='black')
+	self.up.pack(side=TOP)
+	self.up.bind('<Button-1>',self.speedUp)
+
+	self.down = Button (self.init.frame, text = "Speed Down")
+	self.down.pack (side = TOP)
+	self.down.bind('<Button-1>', self.speedDown)
+    def speedDown (self,event):
+	    if self.snake.speed <550:
+		self.snake.speed+=50
+    def speedUp(self,event):
+	    if self.snake.speed > 50:
+		self.snake.speed -=50
     def run(self):	
-	print("inside")
 	if self.isStart == True:
-	    print("aaaaaaaaaaaaaa")
 	    if self.snake.status[0] is "run":
 			self.snake.move()
 
 	    if self.snake.isOver == True:
-		#sys.exit()
+		
 		print("")
+		#sys.exit()
 	self.after(self.snake.speed,self.run)
     def key_release(self, event):
         key = event.keysym
 	direc = {'Up','Down','Left','Right'}
         if key in direc:   
-	    print(key)
             self.snake.dir_change(key)
             self.snake.move()
-	    print (self.isStart)
-	    print(self.snake.isOver)
         elif key == 'p':
             self.snake.status.reverse()
 	elif key == 'Return':
-	    self.isStart = True 
-	    
+	    self.isStart = True
+	elif key == 'u':
+	    if self.snake.speed > 50:
+		self.snake.speed -= 50
+	elif key == 'd':
+	    if self.snake.speed < 550:
+		self.snake.speed +=50
+
 if __name__ == "__main__":
     root = Tk()
     #b=speed(root)
