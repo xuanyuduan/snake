@@ -32,6 +32,12 @@ class Init(object):
 	message = Message (self.frame,textvariable=var,bg= 'black',font=("Purise",15),fg='white',width=300)
 	var.set("\nPause : Key p\nSpeed Up: Key u\nSpeed Down: Key d\nDirection: direction key\n")
 	message.pack(side=TOP)
+
+
+
+
+
+
 #setup grid frame
 class Grid(object):
     def __init__ (self,master=None,width=1000,height=800,grid_width=20,offset=20): 
@@ -130,6 +136,8 @@ class Snake(object):
 	if buf in self.snake[1: ] or buf not in self.grid.list:
 	    self.isOver = True			#set game over, and stop snake 
 	    self.status.reverse()		
+
+
 class Game(Frame):
     def __init__ (self,master =None,*args,**kwargs):
 	Frame.__init__(self,master)
@@ -220,6 +228,7 @@ class Game(Frame):
 if __name__ == "__main__":
     root = Tk()
     root.wm_title("Snake Game")
+    
     game = Game (root)
     game.run()
     game.mainloop()
