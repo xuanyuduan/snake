@@ -4,6 +4,7 @@ from Tkinter import *
 import sys
 from random import randint
 import tkMessageBox
+import time
 
 #initial message
 class Init(object):
@@ -16,7 +17,7 @@ class Init(object):
 	label.pack(side=TOP)#,expand ='Yes',fill=Y)
         empty = Label (self.frame,bg ='black')
 	empty.pack(side=TOP)
-	label2 = Label(self.frame, text = 'Xuyu Duan   ',fg = 'white',bg = 'black')
+	label2 = Label(self.frame, text = 'Xuanyu Duan   ',fg = 'white',bg = 'black')
         label2.pack(side=TOP, anchor = E)#,expand ='Yes',fill= Y)
         label3 = Label (self.frame , text = 'Dong Wang   ',fg = 'white',bg = 'black')
         label3.pack(side = TOP,anchor = E)#,expand ='Yes',fill = Y)
@@ -34,7 +35,8 @@ class Init(object):
 	message.pack(side=TOP)
 
 
-
+    
+        
 
 
 
@@ -173,8 +175,11 @@ class Game(Frame):
 	self.pause.pack(side =	TOP)
 	self.pause.bind('<Button-1>',self.Pause)
 
-	self.score = Label (self.init.frame, text=" Score:",font
-	=("Purise",20),fg='white',bg='black')
+	self.timer = Label(self.init.frame, text="")
+	self.timer.pack (side =TOP)
+	self.timer_update()
+
+	self.score = Label (self.init.frame, text=" Score:",font=("Times",25),fg='white',bg='black')
 	self.score.pack(side=TOP, anchor = W)
 
 	var = StringVar()
@@ -182,6 +187,7 @@ class Game(Frame):
 	='black')
 	var.set(self.snake.score)
 	self.text.pack(side =TOP)
+
     def Pause(self,event):
 		self.snake.status.reverse()
     def speedDown (self,event):
@@ -212,8 +218,9 @@ class Game(Frame):
 	direc = {'Up','Down','Left','Right'}
         if key in direc:   
 	    if self.snake.status[0] == 'run':
-		self.snake.dir_change(key)
-		self.snake.move()
+			self.snake.dir_change(key)
+			if self.isStart == True:
+				self.snake.move()
         elif key == 'p':
             self.snake.status.reverse()
 	elif key == 'Return':
@@ -225,10 +232,18 @@ class Game(Frame):
 	    if self.snake.speed < 550:
 		self.snake.speed +=50
 
+    def timer_update(self):
+        self.time = time.strftime("%H:%M:%S")
+        self.timer.configure(text = self.time)
+        self.after(1000,self.timer_update)
+
+
+
+
+
 if __name__ == "__main__":
     root = Tk()
     root.wm_title("Snake Game")
-    
     game = Game (root)
     game.run()
     game.mainloop()
