@@ -265,7 +265,14 @@ class Game(Frame):
         self.time = time.strftime("%H:%M:%S")
         self.timer.configure(text = self.time)
         self.after(1000,self.timer_update)
-
+	
+    def bonus_destory_update(self):
+	self.snake.destory_bonus_bonusApple()
+	
+    def bonus_create_update(self):
+	self.snake.display_bonusApple()
+	self.after(3000, self.bonus_destory_update)
+	self.after(randint(5000,10000),self.bonus_create_update)
 
 
 
