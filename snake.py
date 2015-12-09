@@ -100,9 +100,18 @@ class Snake(object):
 	self.display()
 	self.display_apple()
 	self.check_score = 0
+
     def display(self):
 	for (x,y) in self.snake:
 	    self.grid.draw((x,y),'blue')
+
+    def display_bonusApple(self):
+	while(1):
+		mun = self.bonusApple.position()
+		if num not in self.snake and num != self.apple.pos:
+			break
+	self.bonusApple.showup()
+
     def isAvaliable(self):
 	for i in self.grid.list:
 	    if i not in self.snake [1: ]:
