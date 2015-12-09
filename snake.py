@@ -112,6 +112,11 @@ class Snake(object):
 			break
 	self.bonusApple.showup()
 
+    def destory_bonusApple(self):
+	if self.bonusApple.pos not in self.snake:
+	   self.bonusApple.destory()
+	   self.bonusApple.pos = (-1,-1)
+
     def isAvaliable(self):
 	for i in self.grid.list:
 	    if i not in self.snake [1: ]:
