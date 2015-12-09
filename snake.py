@@ -72,8 +72,18 @@ class Apple (object):
     	x = randint (1,self.grid.grid_x-3)
 	y = randint (1,self.grid.grid_y-3)
 	self.pos = (x,y)
+	return self.pos
+
     def showup(self):		    #display apple
 	self.grid.draw(self.pos,'magenta')
+
+class BonusApple(Apple):
+	def __init__(self, Grid):
+		Apple.__init__(self, Grid)
+	def showup(self):
+		self.grid.draw(self.pos,'red')
+	def destory(self):
+		self.grid.draw(self.pos,'grey')
 
 class Snake(object):
     def __init__ (self,Grid,Init):
@@ -240,7 +250,7 @@ class Game(Frame):
 
 
 
-#ff
+
 
 if __name__ == "__main__":
     root = Tk()
