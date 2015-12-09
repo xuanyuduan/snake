@@ -155,6 +155,9 @@ class Snake(object):
 	if buf == self.apple.pos:
 	    self.display_apple()
 	    self.score +=1
+	elif buf == self.bonusApple.pos:
+	    self.bonusApple.pos = (-1,-1)
+	    self.score += 5
 	else:
 	    self.grid.draw(self.snake[-1],'grey')
 	    del self.snake[-1]
@@ -202,6 +205,8 @@ class Game(Frame):
 	self.timer = Label(self.init.frame, text="")
 	self.timer.pack (side =TOP)
 	self.timer_update()
+
+	self.bonus_create_update()
 
 	self.score = Label (self.init.frame, text=" Score:",font=("Times",25),fg='white',bg='black')
 	self.score.pack(side=TOP, anchor = W)
