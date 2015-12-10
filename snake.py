@@ -107,7 +107,7 @@ class Snake(object):
 
     def display_bonusApple(self):
 	while(1):
-		mun = self.bonusApple.position()
+		num = self.bonusApple.position()
 		if num not in self.snake and num != self.apple.pos:
 			break
 	self.bonusApple.showup()
@@ -121,12 +121,14 @@ class Snake(object):
 	for i in self.grid.list:
 	    if i not in self.snake [1: ]:
 		return True
+
     def display_apple(self):
     	while (1):
 	    num = self.apple.position()
-	    if num not in self.snake:    
+	    if num not in self.snake and num != self.bonusApple.pos:    
 		break
 	self.apple.showup()
+
     def dir_change (self,direction):
 	if direction == 'Up' and not self.privious  == 'Down':
             self.privious = direction 
