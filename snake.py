@@ -89,6 +89,7 @@ class Snake(object):
     def __init__ (self,Grid,Init):
 	self.grid = Grid
 	self.apple = Apple(self.grid)
+	self.bonusApple = BonusApple(self.grid)
 	self.init = Init
 	self.snake = [(12,6),(12,7)] 
 	self.status = ["run","stop"]   # 0 -> stop 1->run
@@ -269,7 +270,7 @@ class Game(Frame):
         self.after(1000,self.timer_update)
 	
     def bonus_destory_update(self):
-	self.snake.destory_bonus_bonusApple()
+	self.snake.destory_bonusApple()
 	
     def bonus_create_update(self):
 	self.snake.display_bonusApple()
